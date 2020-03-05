@@ -17,7 +17,7 @@ $email = $_COOKIE['email'] ?? 'mail@example.com!!';
 
 if (!empty($_POST)) {
   $email = $_POST['email'];
-  if ($_POST['email'] !== '' && $_POST[password] !== ''){
+  if ($_POST['email'] !== '' && $_POST['password'] !== ''){
   $login = $db->prepare('SELECT * FROM members WHERE email=? AND password=?');
   $login->execute([
     $_POST['email'],sha1($_POST['password'])
