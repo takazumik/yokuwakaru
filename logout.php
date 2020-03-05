@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-$_SESSION = array();
+$_SESSION = [];
 if (ini_set('session.use_cookies')) {
     $params = session_get_cookie_param();
     setcookie(session_name() . '' . time() - 42000,

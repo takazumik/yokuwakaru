@@ -1,6 +1,6 @@
 <?php
 session_start();
-require('../dbconnect.php');
+require_once('../dbconnect.php');
 
 if (!empty($_POST)) {
 
@@ -19,8 +19,9 @@ if (!empty($_POST)) {
 	}
 $fileName = $_FILES['image']['name'];
 	if (!empty($fileName)) {
-		$ext = substr($fileName, -3);
-		if ($ext != 'jpg' && $ext != 'gif' && $ext != 'png'){
+		$ext = pathinfo($fileName, PATHINFO_EXTENSION);
+		if ($ext !== 'jpg' && $ext !== 'gif' && $ext !== 'png'){
+
 			$error['image'] = 'type';
 		}
 	}
@@ -40,8 +41,8 @@ $fileName = $_FILES['image']['name'];
 		move_uploaded_file($_FILES['image']['tmp_name'],'../member_picture/'. $image);
 		$_SESSION['join'] = $_POST;
 		$_SESSION['join']['image'] = $image;
-	header('Location: check.php');
-	exit();
+		header('Location: check.php');
+		exit();
 	}
 }
 

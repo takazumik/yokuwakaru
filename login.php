@@ -1,18 +1,27 @@
 <?php
 session_start();
-require('dbconnect.php');
+require_once('dbconnect.php');
 
-if ($_COOKIE['email'] !== '') {
-  $email = $_COOKIE['email'];
+/*
+if (isset($_COOKIE['email'])) {
+   // クッキーにemailがある
+   $email = $_COOKIE['email']; 
+ } else {
+   // クッキーにemailがない
+   $email = 'mail@example.com';
 }
+*/
+$email = $_COOKIE['email'] ?? 'mail@example.com!!';
+
+// $email = $_COOKIE['email'] ?? ;
 
 if (!empty($_POST)) {
   $email = $_POST['email'];
   if ($_POST['email'] !== '' && $_POST[password] !== ''){
   $login = $db->prepare('SELECT * FROM members WHERE email=? AND password=?');
-  $login->execute(array(
+  $login->execute([
     $_POST['email'],sha1($_POST['password'])
-  ));
+  ]);
   $member = $login->fetch();
 
   if ($member) {
@@ -26,11 +35,11 @@ if (!empty($_POST)) {
 
     header('Location: index.php');
     exit();
-  } else {
+  } else if (false) {
     $error['login'] = 'failed';
-  }
-} else {
+  } else {
   $error['login'] = 'blank';
+}
 }
 }
 ?>

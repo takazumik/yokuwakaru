@@ -1,7 +1,6 @@
 <?php
 session_start();
-ini_set('display_errors', "On");
-require('../dbconnect.php');
+require_once('../dbconnect.php');
 
 if (!isset($_SESSION['join'])) {
 	header('Location: index.php');
@@ -9,12 +8,12 @@ if (!isset($_SESSION['join'])) {
 }
 if (!empty($_POST)) {
 	$statement = $db->prepare('INSERT INTO members SET name=?, email=?, password=?, picture=?, created=NOW()');
-	$statement->execute(array(
+	$statement->execute([
 		$_SESSION['join']['name'],
 		$_SESSION['join']['email'],
 		sha1($_SESSION['join']['password']),
 		$_SESSION['join']['image']
-	));
+	]);
 	unset($_SESSION['join']);
 	header('Location: thanks.php');
 	exit();

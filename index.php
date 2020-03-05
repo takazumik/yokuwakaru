@@ -1,12 +1,13 @@
 <?php
 session_start();
-require('dbconnect.php');
+ini_set('display_errors', 1);
+require_once('dbconnect.php');
 
 if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time()) {
   $_SESSION['time'] = time();
 
   $members = $db->prepare('SELECT * FROM members WHERE id=?');
-  $members->execute(array($_SESSION['id']));
+  $members->execute([$_SESSION['id']]);
   $member = $members->fetch();
 
 } else {
@@ -17,17 +18,14 @@ if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time()) {
 if(!empty($_POST)) {
   if ($_POST['message'] !== '') {
     $message = $db->prepare('INSERT INTO posts SET member_id=?, message=?, reply_message_id=?, created=NOW()');
-    $message->execute(array($member['id'],$_POST['message'], $_POST['reply_post_id']));
+    $message->execute([$member['id'],$_POST['message'], $_POST['reply_post_id']]);
 
     header('Location: index.php');
     exit();
   }
 }
 
-$page = $_REQUEST['page'];
-if ($page == '') {
-  $page = 1;
-}
+$page = $_REQUEST['page'] ??1;
 $page = max($page,1);
 
 $counts = $db->query('SELECT COUNT(*) AS cnt FROM posts');
@@ -43,10 +41,10 @@ $posts->execute();
 
 if (isset($_REQUEST['res'])) {
   $response = $db->prepare('SELECT m.name, m.picture, p.* FROM members m, posts p WHERE m.id=p.member_id AND p.id=?');
-  $response->execute(array($_REQUEST['res']));
+  $response->execute([$_REQUEST['res']]);
 
   $table = $response->fetch();
-  $message = '@' . $table['name'] . '' . $table['message'];
+  $message = '@' . $table['name'] . ' ' . $table['message'];
 }
 ?>
 
@@ -84,12 +82,10 @@ if (isset($_REQUEST['res'])) {
     </form>
 
 <?php foreach ($posts as $post): ?>
-
-
     <div class="msg">
     <img src="member_picture/<?php print(htmlspecialchars($post['picture'], ENT_QUOTES)); ?>" width="48" height="48" alt="<?php print(htmlspecialchars($post['name'], ENT_QUOTES)); ?>" />
     <p><?php print(htmlspecialchars($post['message'], ENT_QUOTES)); ?><span class="name">（<?php print(htmlspecialchars($post['name'], ENT_QUOTES)); ?>）</span>[<a href="index.php?res=<?php print(htmlspecialchars($post['id'], ENT_QUOTES)); ?>">Re</a>]</p>
-    <p class="day"><a href="view.php?id="><?php print(htmlspecialchars($post['created'], ENT_QUOTES)); ?></a>
+    <p class="day"><a href="view.php?id=<?php print(htmlspecialchars($post['id'])); ?>"><?php print(htmlspecialchars($post['created'], ENT_QUOTES)); ?></a>
 <a href="view.php?id=">
 返信元のメッセージ</a>
 <?php if ($_SESSION['id'] == $post['member_id']): ?>
@@ -101,13 +97,13 @@ if (isset($_REQUEST['res'])) {
 
 <ul class="paging">
 <?php if($page > 1): ?>
-<li><a href="index.php?page=<?php print($page-1); ?>">前のページへ</a></li>
+<li><a href="index.php?page=<?php print($page -1); ?>">前のページへ</a></li>
 <?php else : ?>
 <li>前のページへ</li>
 <?php endif; ?>
 
 <?php if($page < $maxPage): ?>
-<li><a href="index.php?page=<?php print($page+1); ?>">次のページへ</a></li>
+<li><a href="index.php?page=<?php print($page +1); ?>">次のページへ</a></li>
 <?php else : ?>
 <li>次のページへ</li>
 <?php endif; ?>
