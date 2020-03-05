@@ -97,13 +97,13 @@ if (isset($_REQUEST['res'])) {
 
 <ul class="paging">
 <?php if($page > 1): ?>
-<li><a href="index.php?page=<?php print($page -1); ?>">前のページへ</a></li>
+<li><a href="index.php?page=<?php print($page - 1); ?>">前のページへ</a></li>
 <?php else : ?>
 <li>前のページへ</li>
 <?php endif; ?>
 
 <?php if($page < $maxPage): ?>
-<li><a href="index.php?page=<?php print($page +1); ?>">次のページへ</a></li>
+<li><a href="index.php?page=<?php print($page + 1); ?>">次のページへ</a></li>
 <?php else : ?>
 <li>次のページへ</li>
 <?php endif; ?>
