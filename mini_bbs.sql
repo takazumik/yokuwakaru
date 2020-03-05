@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 05, 2020 at 07:09 AM
+-- Generation Time: Mar 05, 2020 at 08:43 AM
 -- Server version: 5.7.26
 -- PHP Version: 7.4.2
 
@@ -13,6 +13,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `mini_bbs`
 --
+CREATE DATABASE IF NOT EXISTS `mini_bbs` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `mini_bbs`;
 
 -- --------------------------------------------------------
 
